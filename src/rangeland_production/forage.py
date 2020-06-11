@@ -668,14 +668,15 @@ def execute(args):
             'precip_{}'.format(month_index)] = precip_path
         if not os.path.exists(precip_path):
             missing_precip_path_list.append(precip_path)
-        EO_index_path = args[
-            'monthly_vi_path_pattern'].replace(
-                '<year>', str(year)).replace(
-                '<month>', '{:02d}'.format(month_i))
-        base_align_raster_path_id_map[
-            'EO_index_{}'.format(month_index)] = EO_index_path
-        if not os.path.exists(EO_index_path):
-            missing_EO_index_path_list.append(EO_index_path)
+        # TODO experimental
+        # EO_index_path = args[
+        #     'monthly_vi_path_pattern'].replace(
+        #         '<year>', str(year)).replace(
+        #         '<month>', '{:02d}'.format(month_i))
+        # base_align_raster_path_id_map[
+        #     'EO_index_{}'.format(month_index)] = EO_index_path
+        # if not os.path.exists(EO_index_path):
+        #     missing_EO_index_path_list.append(EO_index_path)
     if missing_precip_path_list:
         raise ValueError(
             "Couldn't find the following precipitation paths given the " +
@@ -820,8 +821,11 @@ def execute(args):
             "ids: %s\n\t" + ", ".join(missing_animal_trait_list))
 
     # align inputs to match resolution of precipitation rasters
+    # TODO experimental
+    # target_pixel_size = pygeoprocessing.get_raster_info(
+    #     base_align_raster_path_id_map['precip_0'])['pixel_size']
     target_pixel_size = pygeoprocessing.get_raster_info(
-        base_align_raster_path_id_map['precip_0'])['pixel_size']
+        args['animal_density'])['pixel_size']
     LOGGER.info(
         "pixel size of aligned inputs: %s", target_pixel_size)
 
@@ -830,6 +834,9 @@ def execute(args):
     PROCESSING_DIR = os.path.join(args['workspace_dir'], "temporary_files")
     if not os.path.exists(PROCESSING_DIR):
         os.makedirs(PROCESSING_DIR)
+
+    # TODO experimental
+    base_align_raster_path_id_map['animal_density'] = args['animal_density']
 
     # set up a dictionary that uses the same keys as
     # 'base_align_raster_path_id_map' to point to the clipped/resampled
@@ -1111,9 +1118,12 @@ def execute(args):
 
         # estimate animal density from provisional biomass in the absence of
         #   grazing vs a remotely sensed vegetation index
-        _estimate_animal_density(
-            aligned_inputs, month_index, pft_id_set,
-            args['animal_grazing_areas_path'], provisional_sv_reg, month_reg)
+        # TODO experimental
+        # _estimate_animal_density(
+        #     aligned_inputs, month_index, pft_id_set,
+        #     args['animal_grazing_areas_path'], provisional_sv_reg, month_reg)
+        # animal density is supplied as an input
+        month_reg['animal_density'] = aligned_inputs['animal_density']
 
         # estimate grazing offtake by animals relative to provisional biomass
         #   at an intermediate step, after senescence but before new growth
