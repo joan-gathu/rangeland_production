@@ -1182,21 +1182,22 @@ def execute(args):
             current_year, current_month, output_dir)
 
     # summary results
-    summary_output_dir = os.path.join(output_dir, 'summary_results')
-    os.makedirs(summary_output_dir)
-    summary_shp_path = os.path.join(
-        summary_output_dir, 'grazing_areas_results_rpm.shp')
-    create_vector_copy(
-        args['animal_grazing_areas_path'], summary_shp_path)
+    # TODO experimental
+    # summary_output_dir = os.path.join(output_dir, 'summary_results')
+    # os.makedirs(summary_output_dir)
+    # summary_shp_path = os.path.join(
+    #     summary_output_dir, 'grazing_areas_results_rpm.shp')
+    # create_vector_copy(
+    #     args['animal_grazing_areas_path'], summary_shp_path)
 
-    field_pickle_map, field_header_order_list = aggregate_and_pickle_results(
-        output_dir, summary_shp_path)
-    _add_fields_to_shapefile(
-        field_pickle_map, field_header_order_list, summary_shp_path)
+    # field_pickle_map, field_header_order_list = aggregate_and_pickle_results(
+    #     output_dir, summary_shp_path)
+    # _add_fields_to_shapefile(
+    #     field_pickle_map, field_header_order_list, summary_shp_path)
 
-    mean_animal_density_path = os.path.join(
-        summary_output_dir, 'mean_animal_density.tif')
-    calc_mean_animal_density(output_dir, mean_animal_density_path)
+    # mean_animal_density_path = os.path.join(
+    #     summary_output_dir, 'mean_animal_density.tif')
+    # calc_mean_animal_density(output_dir, mean_animal_density_path)
 
     # clean up
     shutil.rmtree(persist_param_dir)
